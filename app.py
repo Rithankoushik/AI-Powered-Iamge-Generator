@@ -264,7 +264,20 @@ def main():
                 except Exception as e:
                     st.error(f"Error generating images: {str(e)}")
                     st.write("Full error:", str(e))
-    
+        st.subheader("Paste Image URL to View")
+        image_url = st.text_input("Enter image link here:")
+
+            # Show image if link is entered
+        if image_url:
+            try:
+                response = requests.get(image_url, timeout=5)
+                if response.status_code == 200 and "image" in response.headers.get("Content-Type", ""):
+                    st.image(image_url, use_container_width=True)
+                else:
+                    st.error("Invalid image URL or the link does not point to an image.")
+            except requests.RequestException:
+                st.error("Failed to load image. Please check the URL.")
+
     # Product Photography Tab
     with tabs[1]:
         st.header("Product Photography")
